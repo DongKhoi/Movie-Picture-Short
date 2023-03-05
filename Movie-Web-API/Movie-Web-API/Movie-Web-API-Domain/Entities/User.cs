@@ -1,6 +1,6 @@
 ﻿
-using Core.DTOs;
 using Domain.Common;
+using Domain.DTOs;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
@@ -33,7 +33,7 @@ namespace Domain.Entities
             _reactionMovie = new List<ReactionMovie>();
         }
 
-        public User(UserDTO command) : this()
+        public User(UserDTO movieDTO) : this()
         {
 
         }

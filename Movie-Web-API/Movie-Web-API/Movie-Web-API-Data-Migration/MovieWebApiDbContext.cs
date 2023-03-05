@@ -8,6 +8,12 @@ namespace Movie_Web_API_Data_Migration
     {
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Movie> Movies { get; set; }
+
+        public DbSet<ReactionMovie> ReactionMovies { get; set; }
+
+        public DbSet<RecoveryToken> RecoveryTokens { get; set; }
+
         public MovieWebApiDbContext(DbContextOptions<MovieWebApiDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

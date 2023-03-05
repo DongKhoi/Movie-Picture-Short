@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.DTOs;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
@@ -25,6 +26,13 @@ namespace Domain.Entities
             Id = Guid.NewGuid();
             _reactionMovie = new List<ReactionMovie>();
         }
-
+        public Movie(MovieDTO movieDTO) : this()
+        {
+            Name = movieDTO.Name;
+            PathFile = movieDTO.PathFile;
+            CreatedDate = DateTimeOffset.UtcNow;
+            Priority = 0;
+            LikeNumber = 0;
+        }
     }
 }

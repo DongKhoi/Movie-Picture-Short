@@ -1,4 +1,5 @@
-﻿
+﻿using Domain.DTOs;
+
 namespace Domain.Entities
 {
     public class ReactionMovie : BaseEntity
@@ -11,5 +12,12 @@ namespace Domain.Entities
 
         public Movie Movie { get; protected set; }
 
+        private ReactionMovie() { }
+
+        public ReactionMovie(ReactionMovieDTO reactionMovieDTO) : this()
+        {
+            UserId = reactionMovieDTO.UserId;
+            MovieId = reactionMovieDTO.MovieId;
+        }
     }
 }
