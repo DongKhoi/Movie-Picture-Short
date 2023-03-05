@@ -11,7 +11,6 @@ namespace Movie_Web_API.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieService _movieService;
-
         public MovieController(IMovieService movieService)
         {
             _movieService = movieService;

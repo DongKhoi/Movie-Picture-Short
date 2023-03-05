@@ -26,3 +26,4 @@ namespace Application.Bussiness
             return Response<Guid>.Success(reaction.MovieId);
         }
     }
+}

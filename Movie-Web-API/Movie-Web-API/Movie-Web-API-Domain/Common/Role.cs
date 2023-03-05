@@ -3,7 +3,7 @@ namespace Domain.Common
 {
     public enum Role
     {
-        Admin,
-        Guest
+        Admin = 0,
+        Guest = 1
     }
 }

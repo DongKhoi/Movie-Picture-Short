@@ -14,12 +14,16 @@ namespace Movie_Web_API_Data_Migration
 
         public DbSet<RecoveryToken> RecoveryTokens { get; set; }
 
+        public DbSet<OTP> OTPs { get; set; }
+
         public MovieWebApiDbContext(DbContextOptions<MovieWebApiDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(MovieConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ReactionMovieConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(OTPConfiguration).Assembly);
             base.OnModelCreating(modelBuilder);
         }
     }

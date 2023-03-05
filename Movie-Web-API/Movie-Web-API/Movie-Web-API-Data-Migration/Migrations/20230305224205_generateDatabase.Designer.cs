@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MovieWebApiDbContext))]
-    [Migration("20230305172537_generateSchema")]
-    partial class generateSchema
+    [Migration("20230305224205_generateDatabase")]
+    partial class generateDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,6 +64,36 @@ namespace Infrastructure.Migrations
                     b.ToTable("Movies");
                 });
 
+            modelBuilder.Entity("Domain.Entities.OTP", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("MailAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("OTPcode")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OTPs");
+                });
+
             modelBuilder.Entity("Domain.Entities.ReactionMovie", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -77,6 +107,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTimeOffset?>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
@@ -119,14 +152,10 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId1")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("RecoveryTokens");
                 });
@@ -198,15 +227,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.RecoveryToken", b =>
                 {
-                    b.HasOne("Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1")
+                        .WithOne("RecoveryToken")
+                        .HasForeignKey("Domain.Entities.RecoveryToken", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -221,6 +244,9 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Navigation("ReactionMovies");
+
+                    b.Navigation("RecoveryToken")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

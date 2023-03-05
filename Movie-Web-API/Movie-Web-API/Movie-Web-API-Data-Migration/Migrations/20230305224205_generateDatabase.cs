@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class generateSchema : Migration
+    public partial class generateDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,6 +26,23 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Movies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OTPs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    OTPcode = table.Column<int>(type: "integer", nullable: false),
+                    MailAddress = table.Column<string>(type: "text", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OTPs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,6 +72,7 @@ namespace Infrastructure.Migrations
                 {
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     MovieId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
@@ -85,7 +103,6 @@ namespace Infrastructure.Migrations
                     Token = table.Column<string>(type: "text", nullable: false),
                     ExpiredDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
@@ -97,12 +114,6 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_RecoveryTokens_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_RecoveryTokens_Users_UserId1",
-                        column: x => x.UserId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -122,16 +133,15 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_RecoveryTokens_UserId",
                 table: "RecoveryTokens",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RecoveryTokens_UserId1",
-                table: "RecoveryTokens",
-                column: "UserId1");
+                column: "UserId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "OTPs");
+
             migrationBuilder.DropTable(
                 name: "ReactionMovies");
 

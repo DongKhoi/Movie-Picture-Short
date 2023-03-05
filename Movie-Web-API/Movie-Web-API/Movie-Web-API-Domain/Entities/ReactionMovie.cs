@@ -1,4 +1,5 @@
-﻿using Domain.DTOs;
+﻿using Domain.Common;
+using Domain.DTOs;
 
 namespace Domain.Entities
 {
@@ -12,12 +13,15 @@ namespace Domain.Entities
 
         public Movie Movie { get; protected set; }
 
+        public Status Status { get; protected set; }
+
         private ReactionMovie() { }
 
         public ReactionMovie(ReactionMovieDTO reactionMovieDTO) : this()
         {
             UserId = reactionMovieDTO.UserId;
             MovieId = reactionMovieDTO.MovieId;
+            Status = reactionMovieDTO.Status;
         }
     }
 }

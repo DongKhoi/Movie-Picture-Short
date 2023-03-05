@@ -1,4 +1,5 @@
 ﻿
+using Domain.DTOs;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
@@ -15,6 +16,15 @@ namespace Domain.Entities
         public Guid UserId { get; protected set; }
 
         public User User { get; protected set; }
+
+        private RecoveryToken() { }
+
+        public RecoveryToken(TokenDTO tokenDTO) : this()
+        {
+            UserId = tokenDTO.UserId;
+            ExpiredDate = tokenDTO.ExpiredDate;
+            Token = tokenDTO.Token;
+        }
 
     }
 }

@@ -19,9 +19,15 @@ namespace Infrastructure.Extensions
 
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IReactionMovieRepository, ReactionMovieRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IOTPRepository, OTPRepository>();
+            services.AddScoped<IRecoveryTokenRepository, RecoveryTokenRepository>();
 
             services.AddScoped<IMovieService, MovieService>();
-
+            services.AddScoped<IReactionMovieService, ReactionMovieService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOTPService, OTPService>();
+            services.AddScoped<IRecoveryTokenService, RecoveryTokenService>();
             return services;
         }
     }

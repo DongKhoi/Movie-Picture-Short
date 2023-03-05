@@ -22,6 +22,8 @@ namespace Domain.Entities
 
         public Role Role { get; protected set; }
 
+        public RecoveryToken RecoveryToken { get; set; }
+
 
         private List<ReactionMovie> _reactionMovie;
 
@@ -33,9 +35,14 @@ namespace Domain.Entities
             _reactionMovie = new List<ReactionMovie>();
         }
 
-        public User(UserDTO movieDTO) : this()
+        public User(UserDTO userDTO) : this()
         {
-
+            UserName = userDTO.UserName;
+            Password = userDTO.Password;
+            Email = userDTO.Email;
+            FirstName = userDTO.FirstName;
+            LastName = userDTO.LastName;
+            Role = Role.Guest;
         }
     }
 }
