@@ -1,0 +1,20 @@
+﻿using Domain.Entities;
+using Infrastructure.Configurations;
+using Microsoft.EntityFrameworkCore;
+
+namespace Movie_Web_API_Data_Migration
+{
+    public class MovieWebApiDbContext : DbContext
+    {
+        public DbSet<User> Users { get; set; }
+
+        public MovieWebApiDbContext(DbContextOptions<MovieWebApiDbContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(MovieConfiguration).Assembly);
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+}
