@@ -1,7 +1,7 @@
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
-using System.Net;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,16 +17,14 @@ builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
 {
     builder.AllowAnyOrigin()
            .AllowAnyMethod()
-           .AllowAnyHeader()
-           .SetIsOriginAllowed(_ => true);
+           .AllowAnyHeader();
 }));
 
 builder.Services.AddNpgsqlPersistence(builder.Configuration.GetConnectionString("Movie-Web"));
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 })
  .AddCookie(options =>
  {
@@ -42,28 +40,6 @@ builder.Services.AddAuthentication(options =>
     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "Name");
 });
 
-builder.Services.AddHttpsRedirection(options =>
-{
-    options.RedirectStatusCode = (int)HttpStatusCode.TemporaryRedirect;
-    options.HttpsPort = 5000;
-});
-
-builder.Services.AddHsts(options =>
-{
-    options.Preload = true;
-    options.IncludeSubDomains = true;
-    options.MaxAge = TimeSpan.FromDays(60);
-});
-
-if (!builder.Environment.IsDevelopment())
-{
-    builder.Services.AddHttpsRedirection(options =>
-    {
-        options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
-        options.HttpsPort = 443;
-    });
-}
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -71,18 +47,17 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseHsts();
 }
 
 app.UseCors("MyPolicy");
 
-app.UseRouting();
-
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseRouting();
 
 app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { result } from "lodash";
 import { AuthenService } from "../core/services/auth.service";
 
 @Component({
