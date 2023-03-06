@@ -27,5 +27,12 @@ namespace Infrastructure.Repositories
             _dbContext.RecoveryTokens.Update(recoveryToken);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task RevokeTokenAsync(Guid userId)
+        {
+            _dbContext.RecoveryTokens.Remove(_dbContext.RecoveryTokens.FirstOrDefault(x => x.UserId == userId));
+            await _dbContext.SaveChangesAsync();
+
+        }
     }
 }

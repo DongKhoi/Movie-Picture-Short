@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { AuthenRequest } from "../core/models/authenRequest.model";
 import { AuthenService } from "../core/services/auth.service";
 
 @Component({
@@ -9,20 +10,38 @@ import { AuthenService } from "../core/services/auth.service";
 })
 
 export class LoginComponent implements OnInit {
+    public authRequest : AuthenRequest
+    public FormStatus: Boolean = false
     constructor(private router: Router, private authService: AuthenService) {
-
+        this.authRequest = new AuthenRequest();
     }
     ngOnInit(): void {
     }
 
     loginSubmit()
     {
-        this.authService.login("Khoi","123").subscribe(
-            result => {
-                console.log(result)
-                //localStorage.setItem("access_token", result);
-                this.router.navigateByUrl("/main", { skipLocationChange: true });
+        this.authService.login(this.authRequest.Username, this.authRequest.Password).subscribe(
+            (result: any) => {
+                if(result.data != null)
+                {
+                    localStorage.setItem("access_token", result.data);
+                    localStorage.setItem("user_name", "Khoi");
+                    this.router.navigateByUrl("/main", { skipLocationChange: true });
+                }
+                else
+                {
+                    alert("Username or password incorrect !")
+                }
             }
         )
+    }
+    redirectLoginForm()
+    {
+        this.FormStatus = false;
+    }
+
+    redirectRegisterForm()
+    {
+        this.FormStatus = true;
     }
 }

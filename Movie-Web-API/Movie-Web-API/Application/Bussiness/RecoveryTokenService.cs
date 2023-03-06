@@ -22,7 +22,8 @@ namespace Application.Bussiness
         }
         public async Task<Response<string>> Authenticate(AuthenticateRequest authenticateRequest)
         {
-            var user = await _userRepository.GetUserAsync(authenticateRequest.UserName, authenticateRequest.Password);
+            string encodedStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(authenticateRequest.Password));
+            var user = await _userRepository.GetUserAsync(authenticateRequest.UserName, encodedStr);
             if (user == null)
             {
                 return Response<string>.Error("username or password is incorrect");
@@ -74,6 +75,12 @@ namespace Application.Bussiness
                 await _recoveryTokenRepository.RefreshTokenAsync(recoveryToken);
             }
             return l_tokenHandler.WriteToken(jwt_token);
+        }
+
+        public async Task<Response<Guid>> Logout(Guid userId)
+        {
+            await _recoveryTokenRepository.RevokeTokenAsync(userId);
+            return Response<Guid>.Success(userId);
         }
     }
 }

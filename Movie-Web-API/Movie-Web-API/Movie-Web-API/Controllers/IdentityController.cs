@@ -31,6 +31,12 @@ namespace Movie_Web_API.Controllers
             return await result;
         }
 
+        [HttpPost("revoke-token/{userId}")]
+        public async Task<ActionResult<Response<Guid>>> Logout([FromQuery] Guid userId)
+        {
+            return await _recoveryTokenService.Logout(userId);
+        }
+
         [HttpPost("google-login")]
         public IActionResult GoogleLogin()
         {

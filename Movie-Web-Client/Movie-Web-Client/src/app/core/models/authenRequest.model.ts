@@ -1,4 +1,4 @@
 export class AuthenRequest{
-    Username:string | undefined;
-    Password:string | undefined;
+    Username:string = "";
+    Password:string = "";
 }

@@ -3,6 +3,7 @@ using Application.IRepositories;
 using Domain.Common;
 using Domain.DTOs;
 using Domain.Entities;
+using System.Text;
 
 namespace Application.Bussiness
 {
@@ -20,6 +21,8 @@ namespace Application.Bussiness
 
         public async Task<Response<Guid>> Register(UserDTO userDTO)
         {
+            string encodedStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(userDTO.Password));
+            userDTO.Password = encodedStr;
             User user = new User(userDTO);
             await _userRepository.RegisterUserAsync(user);
             return Response<Guid>.Success(user.Id);
