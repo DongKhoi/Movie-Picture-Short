@@ -14,14 +14,20 @@ namespace Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<int> GetReactionMovieAsync(Guid id)
+        public async Task<ReactionMovie> GetReactionMovieAsync(Guid id, Guid userId)
         {
-            return await _dbContext.ReactionMovies.Where(x => x.MovieId == id).CountAsync();
+            return await _dbContext.ReactionMovies.Where(x => x.MovieId == id && x.UserId == userId).SingleOrDefaultAsync();
         }
 
         public async Task CreateReactionMovieAsync(ReactionMovie reactionMovie)
         {
             _dbContext.ReactionMovies.Add(reactionMovie);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveReactionMovieAsync(ReactionMovie reactionMovie)
+        {
+            _dbContext.ReactionMovies.Remove(reactionMovie);
             await _dbContext.SaveChangesAsync();
         }
     }

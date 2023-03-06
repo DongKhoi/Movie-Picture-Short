@@ -13,9 +13,14 @@ namespace Application.Bussiness
         {
             _movieRepository = movieRepository;
         }
-        public async Task<IEnumerable<Movie?>> GetAll()
+        public async Task<Movie?> GetMovie()
         {
-            return await _movieRepository.GetAllMovieAsync();
+            return await _movieRepository.GetMovieAsync();
+        }
+
+        public async Task<Movie?> GetDetailMovie(Guid id)
+        {
+            return await _movieRepository.GetDetailMovieAsync(id);
         }
 
         public async Task<Response<Guid>> Create(MovieDTO movieDTO)

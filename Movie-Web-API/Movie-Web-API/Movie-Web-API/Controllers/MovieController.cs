@@ -17,9 +17,15 @@ namespace Movie_Web_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie?>>> GetAllMovieAsync()
+        public async Task<ActionResult<Movie?>> GetMovieAsync()
         {
-            return Ok(await _movieService.GetAll());
+            return Ok(await _movieService.GetMovie());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Movie?>> GetMovieDetailAsync([FromRoute] Guid id)
+        {
+            return Ok(await _movieService.GetDetailMovie(id));
         }
 
         [HttpPost]

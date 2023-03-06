@@ -26,15 +26,14 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 })
- .AddCookie(options =>
- {
-     options.LoginPath = "/identity/google-login";
- })
+.AddCookie(options =>
+{
+    options.LoginPath = "/api/identity/google-login";
+})
 .AddGoogle(options =>
 {
     options.ClientId = builder.Configuration["Authentication:Google:Client_Id"];
     options.ClientSecret = builder.Configuration["Authentication:Google:Client_Secret"];
-
     options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "UserId");
     options.ClaimActions.MapJsonKey(ClaimTypes.Email, "EmailAddress", ClaimValueTypes.Email);
     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "Name");

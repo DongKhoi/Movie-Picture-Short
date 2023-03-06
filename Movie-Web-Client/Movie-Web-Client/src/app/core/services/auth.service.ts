@@ -15,4 +15,9 @@ export class AuthenService {
     {
         return this.http.post<any[]>(ApiUrlConstants.API_URL + 'identity/authenticate',{userName, passWord});
     }
+
+    logout(userId : string) :Observable<any[]>
+    {
+        return this.http.post<any[]>(ApiUrlConstants.API_URL + 'identity/revoke-token/' + userId,{});
+    }
 }

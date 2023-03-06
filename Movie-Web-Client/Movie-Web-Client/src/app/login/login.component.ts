@@ -22,10 +22,10 @@ export class LoginComponent implements OnInit {
     {
         this.authService.login(this.authRequest.Username, this.authRequest.Password).subscribe(
             (result: any) => {
-                if(result.data != null)
+                if(result.jwtToken != null)
                 {
-                    localStorage.setItem("access_token", result.data);
-                    localStorage.setItem("user_name", "Khoi");
+                    localStorage.setItem("access_token", result.jwtToken);
+                    localStorage.setItem("user_id", result.id);
                     this.router.navigateByUrl("/main", { skipLocationChange: true });
                 }
                 else

@@ -21,7 +21,7 @@ namespace Domain.Entities
         {
             UserId = reactionMovieDTO.UserId;
             MovieId = reactionMovieDTO.MovieId;
-            Status = reactionMovieDTO.Status;
+            Status = reactionMovieDTO.Status.Value;
         }
     }
 }

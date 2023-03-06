@@ -9,5 +9,6 @@ namespace Application.IRepositories
         Task<UserDTO?> GetUserByEmailAsync(string email);
         Task<UserDTO?> GetUserAsync(string userName, string passWord);
         Task RegisterUserAsync(User user);
+        Task<bool> CheckExistUserAsync(string userName, string email);
     }
 }

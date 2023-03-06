@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Common;
 using Domain.DTOs;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Movie_Web_API.Controllers
@@ -16,16 +17,22 @@ namespace Movie_Web_API.Controllers
             _reactionService = reactionService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<int>> GetAllMovieAsync([FromRoute] Guid id)
+        [HttpPost("check")]
+        public async Task<ActionResult<ReactionMovie>> CheckReactionMovieAsync([FromBody] ReactionMovieDTO reactionDTO)
         {
-            return Ok(await _reactionService.GetDetail(id));
+            return await _reactionService.GetDetail(reactionDTO);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Response<Guid>>> CreateMovieAsync([FromBody] ReactionMovieDTO reactionDTO)
+        public async Task<ActionResult<Response<Guid>>> CreateReactionMovieAsync([FromBody] ReactionMovieDTO reactionDTO)
         {
             return await _reactionService.Create(reactionDTO);
+        }
+
+        [HttpPost("remove")]
+        public async Task<ActionResult<Response<Guid>>> RemoveReactionMovieAsync([FromBody] ReactionMovieDTO reactionDTO)
+        {
+            return await _reactionService.Remove(reactionDTO);
         }
     }
 }

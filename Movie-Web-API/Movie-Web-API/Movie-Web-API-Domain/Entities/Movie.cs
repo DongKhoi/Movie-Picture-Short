@@ -34,5 +34,14 @@ namespace Domain.Entities
             Priority = 0;
             LikeNumber = 0;
         }
+
+        public void AddLike()
+        {
+            LikeNumber++;
+        }
+        public void MinusLike()
+        {
+            LikeNumber--;
+        }
     }
 }

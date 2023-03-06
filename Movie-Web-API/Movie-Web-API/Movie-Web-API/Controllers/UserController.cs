@@ -18,13 +18,13 @@ namespace Movie_Web_API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDTO?>> GetUserAsync([FromQuery] Guid id)
+        public async Task<ActionResult<UserDTO?>> GetUserAsync([FromRoute] Guid id)
         {
             return await _userService.GetUser(id);
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<Response<Guid>>> RegisterUserAsync([FromBody] UserDTO userDTO)
+        public async Task<ActionResult<Response<string>>> RegisterUserAsync([FromBody] UserDTO userDTO)
         {
             return await _userService.Register(userDTO);
         }

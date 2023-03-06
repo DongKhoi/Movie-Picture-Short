@@ -6,7 +6,7 @@ namespace Application.Interfaces
     public interface IUserService
     {
         Task<UserDTO?> GetUser(Guid id);
-        Task<Response<Guid>> Register(UserDTO userDTO);
+        Task<Response<string>> Register(UserDTO userDTO);
         Task<bool> CheckUserExist(string email);
     }
 }

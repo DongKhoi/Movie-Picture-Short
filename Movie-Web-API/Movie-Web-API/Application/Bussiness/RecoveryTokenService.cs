@@ -20,20 +20,29 @@ namespace Application.Bussiness
             _recoveryTokenRepository = recoveryTokenRepository;
             _userRepository = userRepository;
         }
-        public async Task<Response<string>> Authenticate(AuthenticateRequest authenticateRequest)
+        public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest authenticateRequest)
         {
             string encodedStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(authenticateRequest.Password));
             var user = await _userRepository.GetUserAsync(authenticateRequest.UserName, encodedStr);
+            AuthenticateResponse authenticateResponse = new AuthenticateResponse();
             if (user == null)
             {
-                return Response<string>.Error("username or password is incorrect");
+                return null;
             }
-            var recoveryToken = await _recoveryTokenRepository.GetTokenAsync(user.Id.Value);
-
-            return Response<string>.Success(await GenerateJwtToken(user, recoveryToken));
-
+            else
+            {
+                authenticateResponse = new AuthenticateResponse()
+                {
+                    Id = user.Id.Value,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email
+                };
+                var recoveryToken = await _recoveryTokenRepository.GetTokenAsync(user.Id.Value);
+                authenticateResponse.JwtToken = await GenerateJwtToken(user, recoveryToken);
+            }
+            return authenticateResponse;
         }
-
         public async Task<Response<string>> AuthenticateG(string email, string ipAddress)
         {
             var user = await _userRepository.GetUserByEmailAsync(email);

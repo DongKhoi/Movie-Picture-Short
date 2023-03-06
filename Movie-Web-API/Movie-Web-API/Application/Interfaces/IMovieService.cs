@@ -6,7 +6,8 @@ namespace Application.Interfaces
 {
     public interface IMovieService
     {
-        Task<IEnumerable<Movie?>> GetAll();
+        Task<Movie?> GetMovie();
+        Task<Movie?> GetDetailMovie(Guid id);
         Task<Response<Guid>> Create(MovieDTO movieDTO);
     }
 }

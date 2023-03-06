@@ -4,7 +4,9 @@ namespace Application.IRepositories
 {
     public interface IReactionMovieRepository
     {
-        Task<int> GetReactionMovieAsync(Guid id);
+        Task<ReactionMovie> GetReactionMovieAsync(Guid id, Guid UserId);
         Task CreateReactionMovieAsync(ReactionMovie reactionMovie);
+        Task RemoveReactionMovieAsync(ReactionMovie reactionMovie);
+
     }
 }

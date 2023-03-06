@@ -19,13 +19,20 @@ namespace Application.Bussiness
             return await _userRepository.GetDetailUserAsync(id);
         }
 
-        public async Task<Response<Guid>> Register(UserDTO userDTO)
+        public async Task<Response<string>> Register(UserDTO userDTO)
         {
-            string encodedStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(userDTO.Password));
-            userDTO.Password = encodedStr;
-            User user = new User(userDTO);
-            await _userRepository.RegisterUserAsync(user);
-            return Response<Guid>.Success(user.Id);
+            if(await _userRepository.CheckExistUserAsync(userDTO.UserName, userDTO.Email) == true)
+            {
+                return Response<string>.Error("Username or email already exists");
+            }    
+            else
+            {
+                string encodedStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(userDTO.Password));
+                userDTO.Password = encodedStr;
+                User user = new User(userDTO);
+                await _userRepository.RegisterUserAsync(user);
+            }    
+            return Response<string>.Success("Register successfully");
         }
 
         public async Task<bool> CheckUserExist(string email)

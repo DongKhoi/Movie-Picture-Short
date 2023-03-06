@@ -5,7 +5,9 @@ namespace Application.IRepositories
     public interface IMovieRepository
     {
         Task<Movie?> GetDetailMovieAsync(Guid id);
-        Task<IEnumerable<Movie?>> GetAllMovieAsync();
+        Task<Movie?> GetMovieAsync();
         Task CreateMovieAsync(Movie movie);
+        Task AddNumberLike(Guid id);
+        Task MinusNumberLike(Guid id);
     }
 }

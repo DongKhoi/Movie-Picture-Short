@@ -54,5 +54,10 @@ namespace Infrastructure.Repositories
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<bool> CheckExistUserAsync(string userName, string email)
+        {
+            return await _dbContext.Users.AnyAsync(x => x.UserName == userName || x.Email == email);
+        }
     }
 }

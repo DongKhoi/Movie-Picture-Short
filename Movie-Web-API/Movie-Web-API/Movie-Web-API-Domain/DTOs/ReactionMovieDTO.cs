@@ -13,8 +13,7 @@ namespace Domain.DTOs
 
         public Guid MovieId { get; set; }
 
-        public Status Status { get; set; }
-
+        public Status? Status { get; set; }
 
     }
 }
