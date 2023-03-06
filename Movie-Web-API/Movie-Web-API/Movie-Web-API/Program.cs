@@ -1,8 +1,7 @@
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Identity;
-using Movie_Web_API.Middleware;
+using System.Net;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +17,8 @@ builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
 {
     builder.AllowAnyOrigin()
            .AllowAnyMethod()
-           .AllowAnyHeader();
+           .AllowAnyHeader()
+           .SetIsOriginAllowed(_ => true);
 }));
 
 builder.Services.AddNpgsqlPersistence(builder.Configuration.GetConnectionString("Movie-Web"));
@@ -42,6 +42,28 @@ builder.Services.AddAuthentication(options =>
     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "Name");
 });
 
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.RedirectStatusCode = (int)HttpStatusCode.TemporaryRedirect;
+    options.HttpsPort = 5000;
+});
+
+builder.Services.AddHsts(options =>
+{
+    options.Preload = true;
+    options.IncludeSubDomains = true;
+    options.MaxAge = TimeSpan.FromDays(60);
+});
+
+if (!builder.Environment.IsDevelopment())
+{
+    builder.Services.AddHttpsRedirection(options =>
+    {
+        options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
+        options.HttpsPort = 443;
+    });
+}
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -49,9 +71,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseHsts();
 }
 
 app.UseCors("MyPolicy");
+
+app.UseRouting();
 
 app.UseHttpsRedirection();
 
