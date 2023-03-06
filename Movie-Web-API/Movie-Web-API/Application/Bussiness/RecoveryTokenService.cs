@@ -33,6 +33,13 @@ namespace Application.Bussiness
 
         }
 
+        public async Task<Response<string>> AuthenticateG(string email, string ipAddress)
+        {
+            var user = await _userRepository.GetUserByEmailAsync(email);
+            var recoveryToken = await _recoveryTokenRepository.GetTokenAsync(user.Id.Value);
+            return Response<string>.Success(await GenerateJwtToken(user, recoveryToken));
+        }
+
         private async Task<string> GenerateJwtToken(UserDTO user, RecoveryToken recoveryToken)
         {
             var l_tokenHandler = new JwtSecurityTokenHandler();

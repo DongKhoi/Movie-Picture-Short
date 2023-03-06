@@ -7,5 +7,6 @@ namespace Application.Interfaces
     {
         Task<UserDTO?> GetUser(Guid id);
         Task<Response<Guid>> Register(UserDTO userDTO);
+        Task<bool> CheckUserExist(string email);
     }
 }

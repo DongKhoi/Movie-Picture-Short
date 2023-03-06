@@ -24,5 +24,13 @@ namespace Application.Bussiness
             await _userRepository.RegisterUserAsync(user);
             return Response<Guid>.Success(user.Id);
         }
+
+        public async Task<bool> CheckUserExist(string email)
+        {
+            var user = await _userRepository.GetUserByEmailAsync(email);
+            if (user != null)
+                return true;
+            return false;
+        }
     }
 }

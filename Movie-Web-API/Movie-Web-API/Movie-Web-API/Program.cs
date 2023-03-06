@@ -1,6 +1,7 @@
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Identity;
 using Movie_Web_API.Middleware;
 using System.Security.Claims;
 
@@ -27,6 +28,10 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 })
+ .AddCookie(options =>
+ {
+     options.LoginPath = "/identity/google-login";
+ })
 .AddGoogle(options =>
 {
     options.ClientId = builder.Configuration["Authentication:Google:Client_Id"];

@@ -25,6 +25,18 @@ namespace Infrastructure.Repositories
             }).SingleOrDefaultAsync();
         }
 
+        public async Task<UserDTO?> GetUserByEmailAsync(string email)
+        {
+            return await _dbContext.Users.Where(x => x.Email == email).Select(y => new UserDTO
+            {
+                FirstName = y.FirstName,
+                UserName = y.UserName,
+                LastName = y.LastName,
+                Email = y.Email,
+                Role = y.Role
+            }).SingleOrDefaultAsync();
+        }
+
         public async Task<UserDTO?> GetUserAsync(string userName, string passWord)
         {
             return await _dbContext.Users.Where(x => x.UserName == userName && x.Password == passWord).Select(y => new UserDTO
