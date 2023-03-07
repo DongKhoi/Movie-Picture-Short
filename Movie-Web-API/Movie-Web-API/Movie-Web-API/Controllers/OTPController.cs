@@ -16,10 +16,10 @@ namespace Movie_Web_API.Controllers
             _otpService = otpService;
         }
 
-        [HttpPost("send-email-otp")]
-        public async Task<ActionResult<Response<string>>> SendOTPByEmail([FromBody] OtpDTO otpDTO)
+        [HttpPost("send-email-otp/{mailAddress}")]
+        public async Task<ActionResult<Response<string>>> SendOTPByEmail([FromRoute] string mailAddress)
         {
-            return await _otpService.CreateOTPAsync(otpDTO);
+            return await _otpService.CreateOTPAsync(mailAddress);
         }
 
         [HttpPost("verify-otp")]
@@ -34,10 +34,10 @@ namespace Movie_Web_API.Controllers
                 return Response<string>.Error("OTP is not match");
         }
 
-        [HttpDelete("expired-otp")]
-        public async Task<ActionResult<Response<string>>> OTPExpried([FromBody] OtpDTO otpDTO)
+        [HttpDelete("expired-otp/{mailAddress}")]
+        public async Task<ActionResult<Response<string>>> OTPExpried([FromRoute] string mailAddress)
         {
-            return await _otpService.DeleteOTPAsync(otpDTO.MailAddress);
+            return await _otpService.DeleteOTPAsync(mailAddress);
         }
     }
 }

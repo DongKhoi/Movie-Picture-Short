@@ -42,5 +42,11 @@ namespace Application.Bussiness
                 return true;
             return false;
         }
+
+        public async Task<Guid> GetIdUserExist(string email)
+        {
+            var user = await _userRepository.GetUserByEmailAsync(email);
+            return user.Id.Value;
+        }
     }
 }

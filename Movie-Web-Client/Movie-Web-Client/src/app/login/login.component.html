@@ -20,19 +20,25 @@
 
       <!-- Register Form -->
       <form *ngIf="this.FormStatus == true">
-        <input type="text" id="login" class="fadeIn second" name="register" placeholder="username">
-        <input type="password" id="password" class="fadeIn third" name="register" placeholder="password">
-        <input type="password" id="password" class="fadeIn third" name="register" placeholder="confirm password">
-        <input type="text" id="gmail" class="fadeIn third" name="register" placeholder="gmail">
+        <input type="text" id="login" class="fadeIn second" name="register" placeholder="username" [(ngModel)]="this.userDTO.Username">
+        <input type="password" id="password" class="fadeIn third" name="register" placeholder="password" [(ngModel)]="this.userDTO.Password">
+        <input type="password" id="password" class="fadeIn third" name="register" placeholder="confirm password" [(ngModel)]="this.confirmPassword">
+        <div class="fadeIn second" style="color: red;font-size: 10px;" *ngIf="this.userDTO.Password != this.confirmPassword"><span>{{this.PasswordMessage}}</span></div>
+        <input type="text" id="gmail" class="fadeIn third" name="register" placeholder="firstname" [(ngModel)]="this.userDTO.FirstName">
+        <input type="text" id="gmail" class="fadeIn third" name="register" placeholder="lastname" [(ngModel)]="this.userDTO.LastName">
+        <input type="text" id="gmail" class="fadeIn third" name="register" placeholder="gmail" [(ngModel)]="this.userDTO.Email">
+        <div class="fadeIn second" style="color: red;font-size: 10px;" *ngIf="this.userDTO.Email == ''"><span>Email must be not null</span></div>
         <br>
-        <input type="text" id="otp" class="fadeIn third" name="register" placeholder="OTP">
-        <input type="submit" class="fadeIn fourth" value="Send OTP">
-        <input type="submit" class="fadeIn fourth" value="Sign Up">
+        <input type="text" id="otp" class="fadeIn third" name="register" placeholder="OTP" [(ngModel)]="this.otpCode">
+        <div class="fadeIn second" style="color: red;font-size: 10px;"><span>OTP will expire after 30s</span></div>
+        <div class="fadeIn second" style="color: red;font-size: 10px;"><span>{{this.OTPMessage}}</span></div>
+        <input type="submit" class="fadeIn fourth" value="Send OTP" (click)="sendOTP()" *ngIf="this.clicked == true">
+        <input type="submit" class="fadeIn fourth" value="Sign Up" (click)="registerSubmit()">
       </form>
   
       <!-- Remind Passowrd -->
       <div id="formFooter">
-        <a class="underlineHover" href="http://localhost:5000/api/identity/google-login">Sign in with Google</a>     
+        <a class="underlineHover" href="http://localhost:5000/google-login">Sign in with Google</a>     
       </div>
     </div>
   </div>

@@ -20,22 +20,11 @@ export class MainComponent implements OnInit {
         private userService: UserService) {
             this.movieModel = new Movie();
     }
+    
     ngOnInit(): void {
         this.loadMovies();
         this.loadUserProfile();
-        window.addEventListener('scroll', this.scroll, true);
     }
-    ngOnDestroy() {
-        window.removeEventListener('scroll', this.scroll, true);
-    }
-    scroll = (): void => {
-        this.numberScroll++;
-        if(this.numberScroll == 15)
-        {
-            this.loadMovies();
-            this.numberScroll = 0;
-        }
-      };
     async logoutSubmit()
     {
         this.user_id = localStorage.getItem("user_id") as string;
@@ -51,6 +40,8 @@ export class MainComponent implements OnInit {
     {
         this.user_id = localStorage.getItem("user_id") as string;
         await this.movieService.getRandomMovie().subscribe(async (result:any)=>{
+            if(this.movieModel.Id == result.id)
+                this.loadMovies()
             this.movieModel.Id = result.id
             this.movieModel.Name = result.name;
             this.movieModel.PathFile = result.pathFile;

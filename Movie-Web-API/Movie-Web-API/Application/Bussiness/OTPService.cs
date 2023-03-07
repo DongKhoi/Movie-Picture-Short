@@ -19,31 +19,34 @@ namespace Application.Bussiness
             return await _otpRepository.GetOTPAsync(otpDTO);
         }
 
-        public async Task<Response<string>> CreateOTPAsync(OtpDTO otpDTO)
+        public async Task<Response<string>> CreateOTPAsync(string mailAddress)
         {
-            if (otpDTO.MailAddress == null)
+            if (mailAddress == null)
             {
                 return Response<string>.Error("Email is required");
             }
             else
             {
-                var existOTP = _otpRepository.ConfirmOTPAsync(otpDTO.MailAddress);
+                var existOTP = _otpRepository.ConfirmOTPAsync(mailAddress);
                 if (existOTP.Result == false)
                 {
                     Random rand = new Random();
                     int digits = rand.Next(10000, 100000);
-                    otpDTO.OTPcode = digits;
-                    OTP otp = new OTP(otpDTO);
+                    var OTPcode = digits;
+                    OTP otp = new OTP(new OtpDTO()
+                    {
+                        OTPcode = OTPcode,
+                        MailAddress = mailAddress,
+                    });
                     await _otpRepository.CreateOTPAsync(otp);
 
                     string body = "Verification code: " + digits;
 
-                    await EmailService.SendAsync(otpDTO.MailAddress, "Verification Account Movie-Web", body);
-
+                    await EmailService.SendAsync(mailAddress, "Verification Account Movie-Web", body);
                 }
             }    
 
-            return Response<string>.Success(otpDTO.MailAddress);
+            return Response<string>.Success(mailAddress);
         }
 
         public async Task<bool> VerifyOTPAsync(OtpDTO otpDTO)

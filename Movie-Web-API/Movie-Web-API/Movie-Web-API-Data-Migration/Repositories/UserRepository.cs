@@ -29,6 +29,7 @@ namespace Infrastructure.Repositories
         {
             return await _dbContext.Users.Where(x => x.Email == email).Select(y => new UserDTO
             {
+                Id = y.Id,
                 FirstName = y.FirstName,
                 UserName = y.UserName,
                 LastName = y.LastName,
