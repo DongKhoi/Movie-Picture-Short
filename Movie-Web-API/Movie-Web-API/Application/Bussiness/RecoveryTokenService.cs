@@ -43,7 +43,7 @@ namespace Application.Bussiness
             }
             return authenticateResponse;
         }
-        public async Task<Response<string>> AuthenticateG(string email, string ipAddress)
+        public async Task<Response<string>> AuthenticateG(string email)
         {
             var user = await _userRepository.GetUserByEmailAsync(email);
             var recoveryToken = await _recoveryTokenRepository.GetTokenAsync(user.Id.Value);

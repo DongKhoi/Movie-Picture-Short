@@ -22,21 +22,17 @@ builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
 
 builder.Services.AddNpgsqlPersistence(builder.Configuration.GetConnectionString("Movie-Web"));
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-})
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 .AddCookie(options =>
 {
-    options.LoginPath = "/api/identity/google-login";
+    options.LoginPath = "/google-login";
 })
 .AddGoogle(options =>
 {
     options.ClientId = builder.Configuration["Authentication:Google:Client_Id"];
     options.ClientSecret = builder.Configuration["Authentication:Google:Client_Secret"];
-    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "UserId");
-    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "EmailAddress", ClaimValueTypes.Email);
-    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "Name");
+
+    //options.CallbackPath = "/callback-google-login"; 
 });
 
 var app = builder.Build();
@@ -58,6 +54,10 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
+var cookiePolicyOptions = new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax }; app.UseCookiePolicy(cookiePolicyOptions);
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 app.Run();

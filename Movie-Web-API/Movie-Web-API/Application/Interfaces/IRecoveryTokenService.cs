@@ -7,6 +7,6 @@ namespace Application.Interfaces
     {
         Task<Response<Guid>> Logout(Guid userId);
         Task<AuthenticateResponse> Authenticate(AuthenticateRequest authenticate);
-        Task<Response<string>> AuthenticateG(string email, string ipAddress);
+        Task<Response<string>> AuthenticateG(string email);
     }
 }
