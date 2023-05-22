@@ -4,6 +4,8 @@ import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { ApiUrlConstants } from "../common/api-url.constants";
 import { userDTO } from "../models/register.model";
+import { HttpHeaders } from '@angular/common/http';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -11,9 +13,11 @@ export class AuthenService {
     constructor(private router: Router, private http: HttpClient) {
     }
 
-    login(userName: string, passWord: string) :Observable<any[]>
-    {
-        return this.http.post<any[]>(ApiUrlConstants.API_URL + 'identity/authenticate',{userName, passWord});
+    login(email: string, passWord: string): Observable<any[]> {
+      const currentUrl = window.location.href;
+      const headers = new HttpHeaders().set('KarrotUrl', currentUrl);
+
+      return this.http.post<any[]>(ApiUrlConstants.API_URL + 'identity/provider-login', { email, passWord }, { headers });
     }
 
     logout(userId : string) :Observable<any[]>
@@ -23,7 +27,9 @@ export class AuthenService {
 
     register(userName:string, email:string, password:string, firstName:string, lastName:string) :Observable<any[]>
     {
-        return this.http.post<any[]>(ApiUrlConstants.API_URL + 'users/register',{userName, email, password, firstName, lastName});
+      const currentUrl = window.location.href;
+      const headers = new HttpHeaders().set('KarrotUrl', currentUrl);
+        return this.http.post<any[]>(ApiUrlConstants.API_URL + 'identity/provider-register',{userName, email, password, firstName, lastName}, { headers });
     }
 
     sendOTP(mailAddress : string) : Observable<any[]>

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenRequest } from "../core/models/authenRequest.model";
 import { userDTO } from "../core/models/register.model";
 import { AuthenService } from "../core/services/auth.service";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
     selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
     public OTPMessage:string=''
     public PasswordMessage:string=''
     public clicked:boolean = true
-    constructor(private router: Router, private authService: AuthenService, private activatedRoute: ActivatedRoute) {
+    constructor(private router: Router, private authService: AuthenService, private activatedRoute: ActivatedRoute, private http: HttpClient) {
         this.authRequest = new AuthenRequest();
         this.userDTO = new userDTO();
     }
@@ -43,23 +44,22 @@ export class LoginComponent implements OnInit {
         });
     }
 
-
     loginSubmit()
     {
-        this.authService.login(this.authRequest.Username, this.authRequest.Password).subscribe(
-            (result: any) => {
-                if(result != null)
-                {
-                    localStorage.setItem("access_token", result.jwtToken);
-                    localStorage.setItem("user_id", result.id);
-                    this.router.navigateByUrl("/main", { skipLocationChange: true });
-                }
-                else
-                {
-                    alert("Username or password incorrect !")
-                }
-            }
-        )
+      this.authService.login(this.authRequest.Email, this.authRequest.Password).subscribe(
+          (result: any) => {
+              if(result.data != null)
+              {
+                  localStorage.setItem("access_token", result.data.jwt);
+                  localStorage.setItem("user_id", result.data.id);
+                  this.router.navigateByUrl("/main", { skipLocationChange: true });
+              }
+              else
+              {
+                  alert(result.errorMessage)
+              }
+          }
+      )
     }
     redirectLoginForm()
     {
@@ -93,32 +93,37 @@ export class LoginComponent implements OnInit {
         {
             if(this.userDTO.Password == this.confirmPassword)
             {
+              if(this.otpCode != '')
+              {
                 this.authService.verifyOTP(this.otpCode, this.userDTO.Email).subscribe((result:any)=>{
-                    if(result.errorMessage == '' || result.errorMessage == null)
-                    {
-                        this.authService.register(this.userDTO.Username, this.userDTO.Email, this.userDTO.Password, this.userDTO.FirstName, this.userDTO.LastName).subscribe((result:any) =>
-                        {
-                            if(result.data == "Register successfully")
-                            {
-                                this.authService.login(this.userDTO.Username, this.userDTO.Password).subscribe(
-                                    (result: any) => {
-                                        localStorage.setItem("access_token", result.jwtToken);
-                                        localStorage.setItem("user_id", result.id);
-                                        this.router.navigateByUrl("/main", { skipLocationChange: true });
-                                    }
-                                )
-                            }
-                            else
-                            {
-                                alert("Username or gmail already exist !")
-                            }
-                        })
-                    }
-                    else
-                    {
-                        this.OTPMessage = "OTP is not match !";
-                    }
+                  if(result.errorMessage == '' || result.errorMessage == null)
+                  {
+                      this.authService.register(this.userDTO.Username, this.userDTO.Email, this.userDTO.Password, this.userDTO.FirstName, this.userDTO.LastName).subscribe((result:any) =>
+                      {
+                          if(result.data != null)
+                          {
+                              this.authService.login(this.userDTO.Email, this.userDTO.Password).subscribe(
+                                  (result: any) => {
+                                      localStorage.setItem("access_token", result.jwt);
+                                      localStorage.setItem("user_id", result.id);
+                                      this.router.navigateByUrl("/main", { skipLocationChange: true });
+                                  }
+                              )
+                          }
+                          else
+                          {
+                              alert(result.errorMessage)
+                          }
+                      })
+                  }
+                  else
+                  {
+                      this.OTPMessage = "OTP is not match !";
+                  }
                 })
+              }
+              else
+                alert("Please fill otp code")
             }
         }
         else

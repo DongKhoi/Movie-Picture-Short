@@ -20,21 +20,18 @@ export class MainComponent implements OnInit {
         private userService: UserService) {
             this.movieModel = new Movie();
     }
-    
+
     ngOnInit(): void {
         this.loadMovies();
         this.loadUserProfile();
     }
     async logoutSubmit()
     {
-        this.user_id = localStorage.getItem("user_id") as string;
-        await this.authService.logout(this.user_id).subscribe(
-            (result: any) => {
-                localStorage.removeItem("access_token");
-                localStorage.removeItem("user_id");
-                this.router.navigateByUrl("/login", { skipLocationChange: true });
-            }
-        )
+
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("user_id");
+      this.router.navigateByUrl("/login", { skipLocationChange: true });
+
     }
     async loadMovies()
     {
@@ -56,7 +53,7 @@ export class MainComponent implements OnInit {
         });
     }
     async loadUserProfile()
-    {        
+    {
         this.user_id = localStorage.getItem("user_id") as string;
         await this.userService.getUserProfile(this.user_id).subscribe((result:any)=>{
             this.nameUser = result.lastName
