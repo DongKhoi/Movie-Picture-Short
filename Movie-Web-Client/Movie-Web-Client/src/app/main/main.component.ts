@@ -54,10 +54,7 @@ export class MainComponent implements OnInit {
     }
     async loadUserProfile()
     {
-        this.user_id = localStorage.getItem("user_id") as string;
-        await this.userService.getUserProfile(this.user_id).subscribe((result:any)=>{
-            this.nameUser = result.lastName
-        })
+      this.nameUser= localStorage.getItem("user_id") as string;
     }
     async likeMovie(movieId:string)
     {
