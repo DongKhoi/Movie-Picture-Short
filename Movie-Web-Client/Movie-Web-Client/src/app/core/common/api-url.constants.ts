@@ -1,3 +1,3 @@
 export class ApiUrlConstants{
-    public static API_URL = "http://172.174.69.34/api/";
+    public static API_URL = "http://20.226.75.108/api/";
 }
