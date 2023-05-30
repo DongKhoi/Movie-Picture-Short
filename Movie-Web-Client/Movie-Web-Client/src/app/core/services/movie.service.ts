@@ -12,7 +12,7 @@ export class MovieService {
 
     getRandomMovie() :Observable<any[]>
     {
-        return this.http.get<any[]>(ApiUrlConstants.API_URL + 'movies');
+        return this.http.get<any[]>(ApiUrlConstants.API_URL + 'template');
     }
 
     getDetailMovie(id:string) :Observable<any[]>
@@ -24,7 +24,7 @@ export class MovieService {
     {
         return this.http.post<any[]>(ApiUrlConstants.API_URL + 'reaction/check', {movieId, userId});
     }
-    
+
     createReaction(movieId: string, userId: string, status:number) :Observable<any[]>
     {
         return this.http.post<any[]>(ApiUrlConstants.API_URL + 'reaction', {movieId, userId, status});

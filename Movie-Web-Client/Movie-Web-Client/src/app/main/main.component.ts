@@ -37,19 +37,7 @@ export class MainComponent implements OnInit {
     {
         this.user_id = localStorage.getItem("user_id") as string;
         await this.movieService.getRandomMovie().subscribe(async (result:any)=>{
-            if(this.movieModel.Id == result.id)
-                this.loadMovies()
-            this.movieModel.Id = result.id
-            this.movieModel.Name = result.name;
-            this.movieModel.PathFile = result.pathFile;
-            this.movieModel.LikeNumber = result.likeNumber;
-            this.movieModel.Priority = result.priority;
-            await this.movieService.getReaction(this.movieModel.Id, this.user_id).subscribe((rs:any)=>{
-                if(rs != null)
-                    this.movieModel.Reaction = rs.status
-                else
-                    this.movieModel.Reaction = 0
-                })
+          console.log(result)
         });
     }
     async loadUserProfile()
